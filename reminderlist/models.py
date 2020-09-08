@@ -3,18 +3,14 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Post(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE,default=1)
+    user = models.ForeignKey(User,on_delete=models.CASCADE,default=1,related_name='user')
     title = models.CharField(max_length=1024)
     description = models.TextField()
+    likes = models.ManyToManyField(User,related_name='post_like')
 
 
     def __str__(self):
-        return self.title
-
-class Like(models.Model):
-    user=models.ForeignKey(User,on_delete=models.CASCADE)
-    post= models.ForeignKey('Post',on_delete=models.CASCADE)
-    likes = models.BooleanField(default=0)
+        return self.title 
 
 class Comment(models.Model):
     post = models.ForeignKey('Post',on_delete=models.CASCADE)

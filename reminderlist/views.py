@@ -32,13 +32,13 @@ def create(request):
         form = forms.PostForms(request.POST)
         if form.is_valid():
             form = form.save()
-            return HttpResponseRedirect('/todo/')
+            return HttpResponseRedirect('/')
     return render(request,'social/create.html',context)
     
 @login_required(login_url='/auth/login')
 def delete(request,pk):
     models.Post.objects.filter(pk=pk).delete()
-    return HttpResponseRedirect('/todo/')
+    return HttpResponseRedirect('/')
 
 @login_required(login_url='/auth/login')
 def wall(request):
@@ -52,7 +52,7 @@ def wall(request):
     }
     return render(request,'social/wall.html',context)
 
-
+@login_required(login_url='/auth/login')
 def comment(request, pk):
     post = get_object_or_404(models.Post, pk=pk)
     if request.method == "POST":
@@ -62,7 +62,14 @@ def comment(request, pk):
             comment.user = request.user
             comment.post = post
             comment.save()
-            return HttpResponseRedirect('/todo/')
+            return HttpResponseRedirect('/')
     else:
         form = forms.CommentForm()
     return render(request, 'social/comment.html', {'form': form})
+
+
+def like(request,pk):
+    post = get_object_or_404(models.Post,id=request.POST.get('post_id'))
+    print(post)
+    post.likes.add(request.user)
+    return HttpResponseRedirect('/')

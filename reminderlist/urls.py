@@ -8,5 +8,5 @@ urlpatterns = [
     path('delete/<int:pk>/',views.delete,name='delete_activity'),
     path('wall/',views.wall,name='wall'),
     path('post/<int:pk>/comment/', views.comment, name='comment'),
-
+    path('like/<int:pk>/',views.like,name='like_post'),
 ]

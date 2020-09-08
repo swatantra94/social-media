@@ -19,6 +19,11 @@
                         </div>
                         <div class="card-action">
                         <a class="modal-trigger" href="#postModal{{item.id}}">Comments-{{item.comment_set.count}}</a>
+                        <form action="{% url 'like_post' item.pk %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" name='post_id' value={{item.id}}>Like</button>
+                        </form>
+                        {{item.likes.count}}
                     </div>
                 </div>
                 <div id="postModal{{item.id}}" class="modal">
@@ -30,6 +35,7 @@
                         <li>{{comment.user.username}}-{{comment.comment}}</li>
                         {% endfor %}
                         <a class="btn btn-default" href="{% url 'comment' pk=item.pk %}">Add comment</a>
+                                             
                         </form>
                     </ul>
                   </div>
@@ -39,9 +45,3 @@
   </div>
         
 {% endblock %}
-<!-- <form action="" method="post">
-    {% csrf_token %}
-    {{form}}
-    <input type="hidden" value="{{item.id}}" name="item_id" />
-    <button class="btn waves-effect waves-light" type="submit" name="action" value="{{itme.id}}">Submit
-        <i class="material-icons right">send</i> -->
