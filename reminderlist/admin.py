@@ -5,4 +5,5 @@ from reminderlist import models
 admin.site.register([
     models.Post,
     models.Comment,
+    models.Friend,
 ])

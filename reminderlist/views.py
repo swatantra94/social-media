@@ -70,6 +70,18 @@ def comment(request, pk):
 
 def like(request,pk):
     post = get_object_or_404(models.Post,id=request.POST.get('post_id'))
-    print(post)
+    # print(post)
     post.likes.add(request.user)
     return HttpResponseRedirect('/')
+
+
+@login_required(login_url='/auth/login')
+def friend_post(request):
+    a=request.user
+    friendIds = [ friend.friend2.id for friend in  models.Friend.objects.filter(friend1 = request.user) ]
+    friendIds = friendIds + [ friend.friend1.id for friend in  models.Friend.objects.filter(friend2 = request.user) ]
+    a=models.Post.objects.filter(user__in = friendIds)
+    context = {
+        "a":a,
+    }
+    return render(request,'social/wall.html',context)

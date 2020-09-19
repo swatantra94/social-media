@@ -19,3 +19,7 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.comment
+
+class Friend(models.Model):
+    friend1 = models.ForeignKey(User,on_delete=models.CASCADE,related_name='friend1')
+    friend2 = models.ForeignKey(User,on_delete=models.CASCADE,related_name='friend2')
