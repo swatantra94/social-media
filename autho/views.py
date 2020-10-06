@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate,logout
 from django.contrib import messages
 from autho import forms
 from django.http import HttpResponse,HttpResponseRedirect
+import re
 
 # Create your views here.
 
@@ -32,8 +33,10 @@ def logout_view(request):
 
 def signup(request):
     form = forms.SignUpForm()
+    error = ""
     context={
-        "form":form
+        "forms":form,
+        "errors":error   
     }
     if request.method == "POST":
         form = forms.SignUpForm(request.POST)
@@ -42,16 +45,22 @@ def signup(request):
             password = form.cleaned_data["password"]
             confirm_password=form.cleaned_data["confirm_password"]
             email = form.cleaned_data["email"]
-            if password==confirm_password:
-                if User.objects.filter(username=username).exists():
-                    messages.info(request,'username should be unique')
-                    return HttpResponseRedirect('/auth/signup/')
+            if re.fullmatch(r'[A-Za-z0-9@#$%^&+=]{8,}', password):
+                if password==confirm_password:
+                    if User.objects.filter(username=username).exists():
+                        messages.info(request,'username should be unique')
+                        return HttpResponseRedirect('/auth/signup/')
+                    else:
+                        user = User.objects.create_user(username=username,email=email,password=password)
+                        user.save()
+                        return HttpResponseRedirect('/auth/login/')
                 else:
-                    user = User.objects.create_user(username=username,email=email,password=password)
-                    user.save()
-                    return HttpResponseRedirect('/auth/login/')
+                    messages.error(request,'pasword should be mathed')
+                    return HttpResponseRedirect('/auth/signup/')
             else:
-                messages.info(request,'pasword should be mathed')
-                return HttpResponseRedirect('/auth/signup/')
-
+                error="Password should be atleast 8 and also contain a special, upper and lower class character "
+                context={
+                    "forms":form,
+                    "errors":error
+                }
     return render(request,'auth/signup.html',context)

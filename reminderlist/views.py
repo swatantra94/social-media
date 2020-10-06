@@ -31,7 +31,9 @@ def create(request):
     if request.method=="POST":
         form = forms.PostForms(request.POST)
         if form.is_valid():
-            form = form.save()
+            form = form.save(commit=False)
+            form.user = request.user
+            form.save()
             return HttpResponseRedirect('/')
     return render(request,'social/create.html',context)
     
@@ -69,9 +71,13 @@ def comment(request, pk):
 
 
 def like(request,pk):
+    a=request.POST.get('post_id')
+    user=request.user
     post = get_object_or_404(models.Post,id=request.POST.get('post_id'))
-    # print(post)
-    post.likes.add(request.user)
+    if post.likes.filter(id=user.id).exists():
+        post.likes.remove(user)
+    else:
+        post.likes.add(user)
     return HttpResponseRedirect('/')
 
 

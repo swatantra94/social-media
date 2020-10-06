@@ -1,11 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+    
+{{errors}}
     <form action="" method="post">
+        
+        
         {% csrf_token %}
-        {{form}}
-        <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+        {{forms}}
+        <p>Have an acccount already <a href="{% url 'login' %}">Login</a>here</p>
+        <button class="btn waves-effect waves-light" type="submit" name="action">SignUp
             <i class="material-icons right">send</i>
           </button>
     </form>

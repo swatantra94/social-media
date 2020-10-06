@@ -2,6 +2,7 @@
 
 {% block content %}
 
+
 <div class="row">
     <div class="col s12 m6">
         <ul>
@@ -21,7 +22,9 @@
                         <a class="modal-trigger" href="#postModal{{item.id}}">Comments-{{item.comment_set.count}}</a>
                         <form action="{% url 'like_post' item.pk %}" method="post">
                             {% csrf_token %}
-                            <button type="submit" name='post_id' value={{item.id}}>Like</button>
+                            <div>
+                                <button type="submit" name='post_id' value={{item.id}} id="save_like">Like</button>
+                            </div>
                         </form>
                         {{item.likes.count}}
                     </div>
@@ -43,5 +46,7 @@
         </ul>
     </div>
   </div>
+  <!-- {% load static %}
+  <script type=text/javascript src="{% static 'index.js' %}"></script> -->
         
 {% endblock %}
