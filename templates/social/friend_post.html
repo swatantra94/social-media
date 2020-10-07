@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    
+<div class="row">
+    <h3>{{b}}</h3>
+    <div class="col s12 m6">
+        <ul>
+            
+            {% for item in a %}
+                <div class="card blue-grey darken-1 row">
+                    <div class="card-content white-text">
+                        <div class="card-title"><li>{{item}}</li></div>
+                        <p>{{ item.description }}</p>
+                        <p>Comments-{{item.comment_set.count}}</p>
+                        </div>
+                        <div class="card-action">
+                        
+                    </div>
+                </div>
+            {% endfor %}
+        </ul>
+    </div>
+  </div>
+  
+{% endblock %}

@@ -49,9 +49,16 @@ def wall(request):
     for post in posts:
         if post.user.id==request.user.id:
             a.append(post)
-    context={
-        "a":a
-    }
+    if len(a)>0:
+        context={
+            "a":a
+        }
+    else:
+        b="Oops! there is nothing to show"
+        context={
+            "a":a,
+            "b":b
+        }       
     return render(request,'social/wall.html',context)
 
 @login_required(login_url='/auth/login')
@@ -87,7 +94,14 @@ def friend_post(request):
     friendIds = [ friend.friend2.id for friend in  models.Friend.objects.filter(friend1 = request.user) ]
     friendIds = friendIds + [ friend.friend1.id for friend in  models.Friend.objects.filter(friend2 = request.user) ]
     a=models.Post.objects.filter(user__in = friendIds)
-    context = {
-        "a":a,
-    }
-    return render(request,'social/wall.html',context)
+    if len(a)>0:
+        context = {
+            "a":a,
+        }
+    else:
+        b = "Oops! your friends didn't post anything or you don't have any friends"
+        context = {
+            "a":a,
+            "b":b
+        }
+    return render(request,'social/friend_post.html',context)
