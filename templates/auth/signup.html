@@ -4,8 +4,6 @@
     
 {{errors}}
     <form action="" method="post">
-        
-        
         {% csrf_token %}
         {{forms}}
         <p>Have an acccount already <a href="{% url 'login' %}">Login</a>here</p>
