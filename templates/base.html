@@ -24,6 +24,7 @@
           <li><a href="{% url 'login' %}">Login</a>/li>
         {% endif %}
         {% if user.is_authenticated %}
+          <li><a href="{% url 'change_password' %}">Change Password</a>/li>  
           <li><a href="{% url 'wall' %}">Your Post</a>/li>
             <li><a href="{% url 'friend_post' %}">Your friend Post</a>/li>
           <li><a href="{% url 'create_activity' %}">Add</a>/li>

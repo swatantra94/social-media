@@ -48,15 +48,21 @@ def signup(request):
             if re.fullmatch(r'[A-Za-z0-9@#$%^&+=]{8,}', password):
                 if password==confirm_password:
                     if User.objects.filter(username=username).exists():
-                        messages.info(request,'username should be unique')
-                        return HttpResponseRedirect('/auth/signup/')
+                        error="username should be unique"
+                        context={
+                            "forms":form,
+                            "errors":error
+                        }
                     else:
                         user = User.objects.create_user(username=username,email=email,password=password)
                         user.save()
                         return HttpResponseRedirect('/auth/login/')
                 else:
-                    messages.error(request,'pasword should be mathed')
-                    return HttpResponseRedirect('/auth/signup/')
+                    error="password and confirm password should be match"
+                    context={
+                        "forms":form,
+                        "errors":error
+                    }
             else:
                 error="Password should be atleast 8 and also contain a special, upper and lower class character "
                 context={

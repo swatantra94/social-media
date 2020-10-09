@@ -4,6 +4,10 @@ from reminderlist import models,forms
 from django.views.generic.edit import DeleteView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+from reminderlist import forms
+from django.contrib.auth import login as auth_login
+import re
 
 # Create your views here.
 @login_required(login_url='/auth/login')
@@ -105,3 +109,44 @@ def friend_post(request):
             "b":b
         }
     return render(request,'social/friend_post.html',context)
+
+@login_required(login_url='/auth/login')
+def change_password(request):
+    form = forms.ChangePasswordForm()
+    context = {
+        "form":form,
+    }
+    a = request.user
+    if request.method=="POST":
+        form = forms.ChangePasswordForm(request.POST)
+        if form.is_valid():
+            a = request.user
+            password = form.cleaned_data["old_password"]
+            new_password = form.cleaned_data["new_password"]
+            confirm_new_password=form.cleaned_data["confirm_new_password"]
+            user = authenticate(request,username=a, password=password)
+            if user is not None:
+                if re.fullmatch(r'[A-Za-z0-9@#$%^&+=]{8,}', new_password):
+                    if new_password==confirm_new_password:
+                        u = User.objects.get(username=a)
+                        u.set_password(new_password)
+                        u.save()
+                        user = authenticate(request,username=a, password=new_password)
+                        auth_login(request,user)
+                        return HttpResponseRedirect('/')
+                    else:
+                        context = {
+                            "form":form,
+                            "b":"your new password and confirm new password should be match"
+                        }
+                else:
+                    context = {
+                            "form":form,
+                            "b":"New Password should be atleast 8 and also contain a special, upper and lower class character"
+                    }
+            else:
+                context = {
+                            "form":form,
+                            "b":"please enter correct password"
+                }
+    return render(request,'social/change_password.html',context)

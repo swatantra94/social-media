@@ -10,5 +10,5 @@ urlpatterns = [
     path('post/<int:pk>/comment/', views.comment, name='comment'),
     path('like/<int:pk>/',views.like,name='like_post'),
     path('friend/',views.friend_post,name='friend_post'),
-   
+    path('change_password/',views.change_password,name='change_password'),
 ]
