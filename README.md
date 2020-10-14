@@ -16,9 +16,9 @@ env\Scripts\activate
 source env/bin/activate
 ```
 
-## Install django using this command
+## Install requirements using this command
 ```
-pip install django
+pip install -r requirements.txt
 ```
 ## Run the server
 ```
