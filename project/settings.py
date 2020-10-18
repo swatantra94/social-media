@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = 'kd-qq47o4#flj5*+cr2e)murst*+*h69as52g_g++ab$lak!0r'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['social-media-django.herokuapp.com','127.0.0.1']
 
 
 # Application definition
